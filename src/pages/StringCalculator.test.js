@@ -11,3 +11,11 @@ test('returns the number itself for a single number input', () => {
 test('returns the sum of two comma-separated numbers', () => {
     expect(add("1,5")).toBe(6);
 });
+
+test('returns the sum of multiple comma-separated numbers', () => {
+    expect(add("1,2,3,4,5")).toBe(15);
+});
+
+test('handles new lines between numbers', () => {
+    expect(add("1\n2,3")).toBe(6);
+});
