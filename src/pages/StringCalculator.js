@@ -7,15 +7,20 @@ export const add = (numbers) => {
         const delimiterPart = parts[0].slice(2);
         if (delimiterPart.startsWith("[") && delimiterPart.endsWith("]")) {
             delimiters = delimiterPart
-                .slice(1, -1)
-                .split("]["); // Handle multiple delimiters
+                .match(/\[([^\]]+)\]/g) // Extract delimiters within brackets
+                .map((d) => d.slice(1, -1)); // Remove brackets
         } else {
             delimiters.push(delimiterPart);
         }
         numbers = parts.slice(1).join("\n");
     }
 
-    const regex = new RegExp(`[${delimiters.map((d) => d.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join("")}]`);
+    const regex = new RegExp(
+        delimiters
+            .map((d) => d.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')) // Escape special regex characters
+            .join("|") // Join delimiters with "or" operator
+    );
+
     const nums = numbers.split(regex).map((n) => parseInt(n, 10));
 
     const negatives = nums.filter((n) => n < 0);
